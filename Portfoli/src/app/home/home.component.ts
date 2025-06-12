@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 
 @Component({
@@ -8,4 +9,38 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent {
 
+  formData = {
+    name: '',
+    email: '',
+    phone: '',
+    subject: '',
+    message: ''
+  };
+
+  submitting = false;
+  submitSuccess = false;
+  errorMessage = '';
+
+  constructor(private http: HttpClient) {}
+
+  onSubmit() {
+    this.submitting = true;
+    this.errorMessage = '';
+    
+    this.http.post('http://localhost:8080/api/contact', this.formData)
+      .subscribe({
+        next: () => {
+          this.submitSuccess = true;
+          this.submitting = false;
+          this.formData = { name: '', email: '', phone: '', subject: '', message: '' };
+        },
+        error: (err) => {
+          this.submitting = false;
+          this.errorMessage = 'Failed to send message. Please try again later.';
+          console.error('Error submitting form:', err);
+        }
+      });
+  }
 }
+
+// 
