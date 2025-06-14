@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: portfolio
+    runtime: java
+    buildCommand: |
+      cd Portfoli && npm install && npm run build
+      cd ../Portfolio-backend && ./mvnw.cmd clean package
+      xcopy /E /Y "..\Portfoli\dist\portfoli\*" "src\main\resources\static\"
+    startCommand: java -jar target/Portfolio-backend-0.0.1-SNAPSHOT.jar
+    env: java
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_USERNAME
+        value: lottringt12018@gmail.com
+      - key: 
+        generateValue: true 
+      - key: SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH
+        value: "true"
+      - key: SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE
+        value: "true"
+    staticAssets:
+      - path: Portfolio-backend/src/main/resources/static
+        destination: /
