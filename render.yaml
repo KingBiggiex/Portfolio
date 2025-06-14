@@ -48,6 +48,3 @@ services:
         value: lottringt12018@gmail.com
       - key: SMTP_PASSWORD
         generateValue: true
-    staticAssets:
-      - path: Portfolio-backend/src/main/resources/static
-        destination: /
