@@ -18,7 +18,6 @@ services:
     startCommand: |
       cd Portfolio-backend
       java -Dserver.port=$PORT -Dspring.profiles.active=production -jar "$JAR_FILE"
-    env: java
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: production
