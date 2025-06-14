@@ -3,23 +3,48 @@ services:
     name: portfolio
     runtime: java
     buildCommand: |
-      cd Portfoli && npm install && npm run build
-      cd ../Portfolio-backend && chmod +x mvnw && ./mvnw clean package
-      cp -r ../Portfoli/dist/portfoli/* src/main/resources/static/
-    startCommand: |
-      # Set explicit Java path (Render uses Ubuntu Linux)
-      JAVA_HOME=/usr/lib/jvm/temurin-17-jdk-amd64
+      echo "===== BUILD START ====="
       
-      # Verify Java is available
-      if [ ! -d "$JAVA_HOME" ]; then
-        echo "❌ Java not found at $JAVA_HOME"
+      # Build Angular frontend
+      echo "Building frontend..."
+      cd Portfoli
+      npm install
+      npm run build
+      
+      # Build Spring Boot backend
+      echo "Building backend..."
+      cd ../Portfolio-backend
+      chmod +x mvnw
+      ./mvnw clean package
+      
+      # Verify JAR file was created
+      if [ ! -f "target/Portfolio-backend-*.jar" ]; then
+        echo "❌ Error: JAR file not found!"
+        ls -la target/
         exit 1
       fi
       
-      # Start Spring Boot with production profile
-      echo "🚀 Starting Java application..."
-      $JAVA_HOME/bin/java -version
-      $JAVA_HOME/bin/java -Dserver.port=$PORT -Dspring.profiles.active=production -jar target/Portfolio-backend-*.jar
+      # Copy frontend to static resources
+      echo "Copying frontend files..."
+      mkdir -p src/main/resources/static
+      cp -r ../Portfoli/dist/portfoli/* src/main/resources/static/
+      
+      echo "===== BUILD COMPLETE ====="
+    startCommand: |
+      echo "===== STARTING APPLICATION ====="
+      cd Portfolio-backend
+      
+      # Find Java and JAR dynamically
+      JAVA_CMD=$(which java)
+      JAVA_HOME=$(dirname $(dirname $JAVA_CMD))
+      JAR_FILE=$(ls target/Portfolio-backend-*.jar)
+      
+      echo "Java path: $JAVA_CMD"
+      echo "Java home: $JAVA_HOME"
+      echo "JAR file: $JAR_FILE"
+      
+      # Start application
+      $JAVA_CMD -Dserver.port=$PORT -Dspring.profiles.active=production -jar "$JAR_FILE"
     env: java
     envVars:
       - key: SPRING_PROFILES_ACTIVE
@@ -31,11 +56,7 @@ services:
       - key: SMTP_USERNAME
         value: lottringt12018@gmail.com
       - key: SMTP_PASSWORD
-        generateValue: true # You should set this as a secret in Render dashboard
-      - key: SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH
-        value: "true"
-      - key: SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE
-        value: "true"
+        generateValue: true
     staticAssets:
       - path: Portfolio-backend/src/main/resources/static
         destination: /
