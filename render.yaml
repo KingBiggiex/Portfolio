@@ -1,7 +1,41 @@
 services:
   - type: web
     name: portfolio
-    runtime: docker
+    buildCommand: |
+      echo "===== BUILD START ====="
+      
+      # Build Angular frontend
+      echo "Building frontend..."
+      cd Portfoli
+      npm install
+      npm run build
+      
+      # Build Spring Boot backend
+      echo "Building backend..."
+      cd ../Portfolio-backend
+      chmod +x mvnw
+      ./mvnw clean package
+      
+      # Verify JAR file was created
+      if [ ! -f "target/Portfolio-backend-*.jar" ]; then
+        echo "❌ Error: JAR file not found!"
+        ls -la target/
+        exit 1
+      fi
+      
+      # Copy frontend to static resources
+      echo "Copying frontend files..."
+      mkdir -p src/main/resources/static
+      cp -r ../Portfoli/dist/portfoli/* src/main/resources/static/
+      
+      echo "===== BUILD COMPLETE ====="
+    startCommand: |
+      echo "===== STARTING APPLICATION ====="
+      cd Portfolio-backend
+      JAR_FILE=$(ls target/*.jar | head -n 1)
+      echo "Running JAR: $JAR_FILE"
+      java -Dserver.port=$PORT -Dspring.profiles.active=production -jar "$JAR_FILE"
+    env: java
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: production
