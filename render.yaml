@@ -6,7 +6,20 @@ services:
       cd Portfoli && npm install && npm run build
       cd ../Portfolio-backend && chmod +x mvnw && ./mvnw clean package
       cp -r ../Portfoli/dist/portfoli/* src/main/resources/static/
-    startCommand: java -Dserver.port=$PORT -jar target/Portfolio-backend-0.0.1-SNAPSHOT.jar
+    startCommand: |
+      # Set explicit Java path (Render uses Ubuntu Linux)
+      JAVA_HOME=/usr/lib/jvm/temurin-17-jdk-amd64
+      
+      # Verify Java is available
+      if [ ! -d "$JAVA_HOME" ]; then
+        echo "❌ Java not found at $JAVA_HOME"
+        exit 1
+      fi
+      
+      # Start Spring Boot with production profile
+      echo "🚀 Starting Java application..."
+      $JAVA_HOME/bin/java -version
+      $JAVA_HOME/bin/java -Dserver.port=$PORT -Dspring.profiles.active=production -jar target/Portfolio-backend-*.jar
     env: java
     envVars:
       - key: SPRING_PROFILES_ACTIVE
