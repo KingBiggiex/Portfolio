@@ -1,7 +1,6 @@
 services:
   - type: web
     name: portfolio
-    runtime: java
     buildCommand: |
       echo "===== BUILD START ====="
       
