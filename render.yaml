@@ -9,15 +9,15 @@ services:
       npm run build
        
       cd ../Portfolio-backend
-      ./mvnw clean package
+      mvn clean package
 
       mkdir -p src/main/resources/static
-      cp -r ../Portfoli/dist/portfoli/* src/main/resources/static/
+      cp -r ../Portfoli/dist/portfoli/* src/main/resources/static
       
       echo "===== BUILD COMPLETE ====="
     startCommand: |
       cd Portfolio-backend
-      java -Dserver.port=$PORT -Dspring.profiles.active=production -jar "$JAR_FILE"
+      java -Dserver.port=$PORT -Dspring.profiles.active=production -jar target/*.jar
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: production
