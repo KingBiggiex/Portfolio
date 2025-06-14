@@ -33,18 +33,9 @@ services:
     startCommand: |
       echo "===== STARTING APPLICATION ====="
       cd Portfolio-backend
-      
-      # Find Java and JAR dynamically
-      JAVA_CMD=$(which java)
-      JAVA_HOME=$(dirname $(dirname $JAVA_CMD))
-      JAR_FILE=$(ls target/Portfolio-backend-*.jar)
-      
-      echo "Java path: $JAVA_CMD"
-      echo "Java home: $JAVA_HOME"
-      echo "JAR file: $JAR_FILE"
-      
-      # Start application
-      $JAVA_CMD -Dserver.port=$PORT -Dspring.profiles.active=production -jar "$JAR_FILE"
+      JAR_FILE=$(ls target/*.jar | head -n 1)
+      echo "Running JAR: $JAR_FILE"
+      java -Dserver.port=$PORT -Dspring.profiles.active=production -jar "$JAR_FILE"
     env: java
     envVars:
       - key: SPRING_PROFILES_ACTIVE
