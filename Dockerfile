@@ -7,6 +7,8 @@ WORKDIR /app
 # Copy source
 COPY Portfolio-backend /app
 
+RUN chmod +x ./mvnw
+
 # Build the app
 RUN ./mvnw clean package
 
