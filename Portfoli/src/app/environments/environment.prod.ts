@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: '/api/' // Relative path for production
+  apiUrl: 'https://portfolio-l3qx.onrender.com' // Relative path for production
 };
