@@ -27,7 +27,7 @@ export class HomeComponent {
     this.submitting = true;
     this.errorMessage = '';
     
-    this.http.post('http://localhost:8080/api/contact', this.formData)
+    this.http.post('https://portfolio-l3qx.onrender.com', this.formData)
       .subscribe({
         next: () => {
           this.submitSuccess = true;

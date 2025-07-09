@@ -14,7 +14,7 @@ import com.example.Portfolio_backend.DTO.ContactForm;
 
 @RestController
 @RequestMapping("/api/contact")
-@CrossOrigin(origins = "*") // Adjust this to your Angular app's URL in production
+@CrossOrigin(origins = "*")
 public class ContactController {
 
     @Autowired
