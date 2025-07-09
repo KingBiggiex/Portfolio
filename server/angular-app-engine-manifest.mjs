@@ -1,6 +1,6 @@
 
 export default {
-  basePath: '/',
+  basePath: 'https://KingBiggiex.github.io/Portfolio',
   supportedLocales: {
   "en-US": ""
 },
