@@ -1,0 +1,9 @@
+.bar { position: sticky; top: 0; z-index: 10; background: rgba(241, 238, 245, 0.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.bar-inner { max-width: 1080px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.mark { font-family: var(--display); font-weight: 800; font-size: 1.15rem; color: var(--ink); text-decoration: none; white-space: nowrap; }
+.links { display: flex; align-items: center; gap: 22px; overflow-x: auto; scrollbar-width: none; }
+.links a { color: var(--muted); text-decoration: none; font-weight: 500; font-size: 0.95rem; white-space: nowrap; }
+.links a:hover { color: var(--ink); }
+.links .cta { color: #fff; background: var(--accent); padding: 8px 18px; border-radius: 999px; }
+.links .cta:hover { color: #fff; background: var(--ink); }
+@media (max-width: 760px) { .bar-inner { flex-direction: column; align-items: flex-start; gap: 8px; } }
